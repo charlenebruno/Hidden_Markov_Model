@@ -7,9 +7,10 @@ N=3
 
 #nb of observable states
 T=4
-K=4
+
 
 #given sequence: x = {x1,x3,x2,x0}
+x = [1,3,2,0]
 
 #Matrix aij (transition probability from z(t-1)=zi to z(t)=zj
 aij = np.array([[1,0,0,0],
@@ -35,21 +36,22 @@ for j in range(0,N+1):
         alphaMatrix[j][0] = 1
     else:
         alphaMatrix[j][0] = 0
+print("initialisation alphaMatrix")
 print(alphaMatrix)
 
 #HMM forward algorithm
-def HMM(T,N,alphaMatrix,aij,bjk):
+def HMM(T,N,alphaMatrix,aij,bjk,x):
     for t in range(1,T+1):
-        for j in range(1,N+1):
+        for j in range(0,N+1):
             sum = 0
             for i in range(0,N+1):
-                sum+= alphaMatrix[i][t-1]*aij[i][j]
-            print(sum)
-            alphaMatrix[j][t] = bjk[j][t]*sum
+                sum = sum + alphaMatrix[i][t-1]*aij[i][j]
+            alphaMatrix[j][t] = bjk[j][x[t-1]]*sum
+    print("alphamatrix final")
     print(alphaMatrix)
     return alphaMatrix[0][T]
 
-result = HMM(T,N,alphaMatrix,aij,bjk)
+result = HMM(T,N,alphaMatrix,aij,bjk,x)
 print(result)
 
 
